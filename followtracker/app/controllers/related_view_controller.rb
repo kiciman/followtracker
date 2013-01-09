@@ -1,0 +1,2 @@
+class RelatedViewController < ApplicationController
+end
