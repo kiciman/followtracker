@@ -1,12 +1,7 @@
-Viewers of this profile also viewed:
+Viewers of this company also viewed employees at:
 <hr>
-<%@out.each do |o| %>
-    <%= o[:name]%>
-    <br>
-    <%= o[:jobtitle]%>
-    <br>
-    <%= o[:company]%>
-    <br>
-    <%= o[:link]%>
-<hr>
+<%@related_cos.each do |r|%>
+  <%=r%>
+  <br>
+  
 <%end%>

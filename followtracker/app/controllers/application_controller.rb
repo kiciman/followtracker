@@ -1,10 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_current_account
+  #before_filter :set_current_account
 
   def set_current_account
     
     @agent = Mechanize.new
+    @agent.user_agent_alias = 'Mac Safari'
     page = @agent.get('https://www.linkedin.com/uas/login?goback=&trk=hb_signin')
     login_form = @agent.page.form("login")
     login_form.session_key = "kiciman@gmail.com"
