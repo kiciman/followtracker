@@ -1,0 +1,23 @@
+Refinery data is as follows
+<hr>
+<table>
+<tr>
+  <td>Name</td>
+  <td>Company</td>
+  <td>City</td>
+  <td>Country</td>
+  <td>Capacity (000's bbl/day)</td>  
+  <td>Supply Notes</td>    
+</tr>
+<%@refineries.each do |r|%>
+  <tr>
+  <td><%=r[:name]%></td>
+  <td><%=r[:company]%></td>
+  <td><%=r[:city]%></td>
+  <td><%=r[:country]%></td>
+  <td><%=r[:capacity]%></td>
+  <td><%=r[:supply]%></td>
+  </tr>
+  
+<%end%>
+</table>

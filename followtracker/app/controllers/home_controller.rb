@@ -21,18 +21,28 @@ class HomeController < ApplicationController
     
   end
   
+  def twitter_data
+    if params[:screen_name]
+      @sname = params[:screen_name]
+    else
+      @sname = "SunnyBump"
+    end
+    @followers = grab_followers(@sname)
+
+  end
+
+
+
+  
+  
   def refinery_data
-    
     pickupat = params[:pickupat] ? params[:pickupat].to_i : 0
     @refineries = RefineryData.all
-    
     if params[:getdata].to_i == 1
       @agent = Account.current
       fulllink = "http://abarrelfull.wikidot.com/global-refineries"
       page = @agent.get(fulllink)
-    
       continents = ["african-refineries", "asian-refineries", "australasian-refineries", "central-asian-and-russian-refineries", "european-refineries", "middle-eastern-refineries", "north-american-refineries", "us-refineries", "south-and-central-american-refineries"]
-
       count = 0
       continents.each do |c|
         p = @agent.get("http://abarrelfull.wikidot.com/" + c)
@@ -46,14 +56,12 @@ class HomeController < ApplicationController
           rescue Mechanize::ResponseCodeError => e
             next
           end
-                
           sleep 0.2
           begin 
             lis = refinery_page.search("#page-content/ul/li")
           rescue Exception => e
             next
           end
-        
           r_name = refinery_page.at("#page-title") ? refinery_page.at("#page-title").text.gsub("\n", "").strip : nil
           r_company = refinery_page.at('//h3[.="Summary Information"]') ? refinery_page.at('//h3[.="Summary Information"]').next ? refinery_page.at('//h3[.="Summary Information"]').next.next ? refinery_page.at('//h3[.="Summary Information"]').next.next.search("li")[0] ? refinery_page.at('//h3[.="Summary Information"]').next.next.search("li")[0].text.split(": ")[1] : nil : nil : nil : nil
           next if r_company.nil?
@@ -61,9 +69,7 @@ class HomeController < ApplicationController
           r_capacity = refinery_page.at('//h3[.="Summary Information"]') ? refinery_page.at('//h3[.="Summary Information"]').next ? refinery_page.at('//h3[.="Summary Information"]').next.next ? refinery_page.at('//h3[.="Summary Information"]').next.next.search("li")[3] ? refinery_page.at('//h3[.="Summary Information"]').next.next.search("li")[3].text.split("& ")[1] : nil : nil : nil : nil
           r_supply = refinery_page.at('//h3[.="Crude Supply"]') ? refinery_page.at('//h3[.="Crude Supply"]').next ? refinery_page.at('//h3[.="Crude Supply"]').next.next ? refinery_page.at('//h3[.="Crude Supply"]').next.next.children ? refinery_page.at('//h3[.="Crude Supply"]').next.next.children.text : nil : nil : nil : nil
           r_country = c
-        
-
-        
+      
           puts r_name
           puts count
         
@@ -74,9 +80,23 @@ class HomeController < ApplicationController
     end
   end
   
-  
-  
+
   private
+  
+  def grab_followers(screen_name)
+    raw_followers = Twitter.follower_ids(screen_name)
+    sliced_followers = raw_followers.each_slice(100).to_a
+    temp = []
+    followers = []
+    sliced_followers.each do |sf|
+      temp = sf.collect {|c| c}
+      user_data = Twitter.users(temp, :method => :get, :include_entities => false)
+      user_data.each do |ud|
+        followers << {:screen_name => ud[:screen_name], :followers_count => ud[:followers_count]}
+      end
+    end
+    return followers.sort_by{|a| a[:followers_count]}.reverse
+  end
   
   
   def setup_company

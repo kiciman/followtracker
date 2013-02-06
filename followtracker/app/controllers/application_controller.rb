@@ -16,6 +16,14 @@ class ApplicationController < ActionController::Base
     #login_form.submit
     
     Account.current = @agent
+    
+    Twitter.configure do |config|
+      config.consumer_key = "MDrR9BxYXS4miBT8NbMg"
+      config.consumer_secret = "9ns7T3JvcuwcslUeBJ6LigM973gd0VPeUsuUKJqSlc"
+      config.oauth_token = "883288452-5dyhFvhV7ill8uPOOCwfNvCnis0i6qjkFvqvqKdm"
+      config.oauth_token_secret = "bSaZQDjQA9TvkDuIiAQrDajiZ9ptcgwoIxstXsPrY"
+    end
+    
 
   end
 end

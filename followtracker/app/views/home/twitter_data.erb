@@ -1,0 +1,23 @@
+Twitter - Follower data for <%=@sname%>:
+<hr>
+<table>
+  <tr>
+    <td>
+    Screen Name
+    </td>
+    <td>
+    Follower Count
+    </td>
+  </tr>
+  <%@followers.each do |a|%>
+    <tr>
+      <td>
+        <%=a[:screen_name]%>
+      </td>
+      <td>
+        <%=a[:followers_count]%>
+      </td>
+
+    </tr>
+  <%end%>
+</table>

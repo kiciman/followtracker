@@ -5,6 +5,7 @@ Followtracker::Application.routes.draw do
 
   root :to => "home#index"
   match "/refinerydata" => "home#refinery_data"
+  match "/twitterdata" => "home#twitter_data"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
