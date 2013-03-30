@@ -11,3 +11,14 @@
  *= require_self
  *= require_tree .
  */
+
+ td {
+   text-align: left;
+   font-weight: normal;
+   border-width: 1px;
+   border-color: black;
+   border-style: solid;
+   text-align: right;
+   width: auto;
+   width: 25%;
+ }

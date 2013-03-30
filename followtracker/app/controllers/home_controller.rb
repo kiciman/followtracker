@@ -28,7 +28,6 @@ class HomeController < ApplicationController
       @sname = "SunnyBump"
     end
     @followers = grab_followers(@sname)
-
   end
 
 
@@ -78,6 +77,75 @@ class HomeController < ApplicationController
         end
       end
     end
+  end
+  
+  
+  def pinterest_data
+    @agent = Account.current
+    page_num = 1
+    pop_pinners = []
+    #REPINLY LINKS:for each paginated piece of the list of top pinners we're going to grab every repinly page link
+    puts "Entering the REPINLY LINKS"
+    while page_num < 101
+      pagelink = "http://www.repinly.com/popular_pinners.aspx?p=#{page_num}&by=follr"
+      begin
+        page = @agent.get(pagelink)
+      rescue Mechanize::ResponseCodeError => e
+        page_num = page_num + 1
+        next
+      end  
+      tl = page.search("div/.pp_bolns/a") ? page.search("div/.pp_bolns/a") : nil
+      if tl.nil?
+        next
+      end
+      tl.each do |s|
+        puts s[:href]
+        pop_pinners << s[:href]
+      end
+      page_num = page_num + 1
+      sleep(1)
+    end
+    #PINTEREST LINKS: for each of the top pinners page we're going to grab every pinterst page link
+    pop_pinners_links = []
+    puts "Entering the PINTEREST LINKS"
+    pop_pinners.each do |pp|
+      if pp.nil?
+        next
+      else
+        pagelink = "http://www.repinly.com" + pp
+      end
+      begin
+        page = @agent.get(pagelink)
+      rescue Mechanize::ResponseCodeError => e
+        next
+      end  
+      puts page.at("#u_lnk")[:href]      
+      pop_pinners_links << page.at("#u_lnk")[:href]
+      sleep(1)
+    end
+    #FACEBOOK LINKS: for every pinterest page link, we're going to check for a facebook link and keep it if there is one.
+    puts "Entering the FACEBOOK LINKS"
+    pop_pinners_facebook = []
+    pop_pinners_links.each do |ppl|
+      begin
+        page = @agent.get(ppl)
+      rescue Mechanize::ResponseCodeError => e
+        next
+      end
+      sleep(1)
+      fb_id = page.at(".facebook") ? page.at(".facebook")[:href].gsub("http://facebook.com/profile.php?id=", "") : nil
+      fers_count = page.search("#ContextBar/div.FixedContainer/ul.follow/li/a").children()[1].text
+      fing_count = page.search("#ContextBar/div.FixedContainer/ul.follow/li/a").children()[4].text
+      puts fb_id
+      if fb_id.nil?
+        next
+      else
+        pop_pinners_facebook << {:fb_id => fb_id,:pin_link => ppl, :fers_count => fers_count, :fing_count => fing_count}
+        
+      end
+    end
+    
+    @pop_fb = pop_pinners_facebook
   end
   
 
