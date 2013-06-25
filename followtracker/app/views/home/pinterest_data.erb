@@ -1,0 +1,37 @@
+
+Pinterest - Most Popular Pinners data:
+<hr>
+<table>
+  <tr>
+    <td>
+      Facebook ID
+    </td>
+    <td>
+      Pinterest Link
+    </td>
+    <td>
+      Followers
+    </td>
+    <td>
+      Following
+    </td>
+    
+
+  </tr>
+  <%@pop_fb.each do |a|%>
+    <tr>
+      <td>
+        <%=a[:fb_id]%>
+      </td>
+      <td>
+        <%=a[:pin_link]%>
+      </td>
+      <td>
+        <%=a[:fers_count]%>
+      </td>
+      <td>
+        <%=a[:fing_count]%>
+      </td>
+    </tr>
+  <%end%>
+</table>

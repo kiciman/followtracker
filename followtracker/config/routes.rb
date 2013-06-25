@@ -7,6 +7,8 @@ Followtracker::Application.routes.draw do
   match "/refinerydata" => "home#refinery_data"
   match "/twitterdata" => "home#twitter_data"
   match "/pinterestdata" => "home#pinterest_data"  
+  match "/capitalmarkets/:ticker" => "home#capital_markets"
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
