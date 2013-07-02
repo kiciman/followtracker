@@ -1,45 +1,21 @@
 Capital Markets Scraping - <%=@ticker%>:
 <hr>
 <table>
-<tr>
-  <td>
-    Company Name
-  </td>
-  <td>
-    CIK
-  </td>
-  <td>
-    Owner Name
-  </td>
-  <td>
-    Title
-  </td>
-  <td>
-    Transaction Date
-  </td>
-
-</tr>
-<%@filing_info.each do |foo|%>
-<tr>
-  <td>
-    <%=foo[:companyName]%>
-  </td>
-  <td>
-    <%=foo[:companyCIK]%>
-  </td>
-  <td>
-    <%=foo[:rptOwnerName]%>
-  </td>
-
-  <td>
-    <%=foo[:officerTitle]%>
-  </td>
-  <td>
-    <%=foo[:transactionDate]%>
-  </td>
-  
-  
-</tr>
-<%end%>
+  <tr>
+    <%@filing_info[0].each do |key, value|%>
+      <td>
+        <%=key%>
+      </td>
+    <%end%>
+  </tr>
+  <%@filing_info.each do |h| %>
+    <tr>
+      <%h.each do |key,value|%>
+        <td>
+          <%=value%>
+        </td>  
+      <%end%>
+    </tr>
+  <%end%>
 
 </table>
