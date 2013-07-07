@@ -32,8 +32,9 @@ class HomeController < ApplicationController
 
 
   def capital_markets
-    @tickers = ["MMM","ABT","ABBV","ANF"]
-    #@ticker = params[:ticker] ? params[:ticker] : ""
+    
+    @ticker = params[:ticker] ? params[:ticker] : ""
+    @tickers = [@ticker] #["MMM","ABT","ABBV","ANF"]
     @formtype = params[:formtype] ? params[:formtype] : ""
     @ownership = params[:ownership] ? params[:ownership] : ""
     @count = "100"
